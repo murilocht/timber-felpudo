@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scripts/game.gd" type="Script" id=1]
 [ext_resource path="res://assets/img_fundoChao.png" type="Texture" id=2]
@@ -6,6 +6,10 @@
 [ext_resource path="res://assets/felpudoIdle.png" type="Texture" id=4]
 [ext_resource path="res://assets/felpudoBate.png" type="Texture" id=5]
 [ext_resource path="res://assets/grave.png" type="Texture" id=6]
+[ext_resource path="res://scripts/barra.gd" type="Script" id=7]
+[ext_resource path="res://assets/barra_recipiente.png" type="Texture" id=8]
+[ext_resource path="res://assets/barra.png" type="Texture" id=9]
+[ext_resource path="res://assets/new_dynamicfont.tres" type="DynamicFont" id=10]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Bater"
@@ -17,7 +21,7 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.2 ),
+"times": PoolRealArray( 0, 0.1 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 1,
 "values": [ false, true ]
@@ -29,7 +33,7 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 0.2 ),
+"times": PoolRealArray( 0, 0.1 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 1,
 "values": [ true, false ]
@@ -45,16 +49,19 @@ texture = ExtResource( 2 )
 centered = false
 
 [node name="Felpudo" type="Node2D" parent="."]
+editor/display_folded = true
 position = Vector2( 220, 1070 )
+z_index = 1
 script = ExtResource( 3 )
 
 [node name="Idle" type="Sprite" parent="Felpudo"]
-scale = Vector2( 0.5, 0.5 )
+position = Vector2( 0, 30 )
+scale = Vector2( 0.4, 0.4 )
 texture = ExtResource( 4 )
 
 [node name="Bate" type="Sprite" parent="Felpudo"]
 visible = false
-scale = Vector2( 0.5, 0.5 )
+scale = Vector2( 0.4, 0.4 )
 texture = ExtResource( 5 )
 
 [node name="Grave" type="Sprite" parent="Felpudo"]
@@ -68,6 +75,36 @@ flip_h = true
 [node name="Anim" type="AnimationPlayer" parent="Felpudo"]
 anims/Bater = SubResource( 1 )
 
-[node name="Camera" type="Camera2D" parent="."]
-anchor_mode = 0
-current = true
+[node name="Barris" type="Node2D" parent="."]
+
+[node name="DestBarris" type="Node2D" parent="."]
+
+[node name="Barra" type="Node2D" parent="."]
+editor/display_folded = true
+position = Vector2( 360, 100 )
+scale = Vector2( 2, 2 )
+script = ExtResource( 7 )
+
+[node name="Sprite" type="Sprite" parent="Barra"]
+texture = ExtResource( 8 )
+
+[node name="Marcador" type="Sprite" parent="Barra"]
+texture = ExtResource( 9 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 188, 23 )
+
+[node name="Control" type="CanvasLayer" parent="."]
+editor/display_folded = true
+
+[node name="Pontos" type="Label" parent="Control"]
+margin_left = -2.49304
+margin_top = 147.091
+margin_right = 718.507
+margin_bottom = 316.091
+custom_fonts/font = ExtResource( 10 )
+text = "0"
+align = 1
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 2.0
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
